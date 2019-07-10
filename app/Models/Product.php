@@ -24,10 +24,8 @@ class Product extends Model
     }
 
     public function cities()
-    {
-       
-        return $this->belongsToMany(City::class, 'product_cities');
-        
+    {  
+        return $this->belongsToMany(City::class, 'product_cities');   
     }
 
     public function countries()
