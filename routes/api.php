@@ -22,4 +22,10 @@ Route::get("/specialdeals", "SpecialDealsController@index");
 
 Route::get("/populartours", "PopularToursController@index");
 
-Route::get("/aboutus", "aboutusController@index");
+Route::get("/aboutus", "AboutUsController@index");
+
+Route::get("{country}/cities", "CountryController@index");
+
+Route::get("{country}/products", "CountryController@getCountryProducts");
+
+Route::get("/{product}/spots", "SpotController@getProductSpots");

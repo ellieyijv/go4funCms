@@ -16,12 +16,11 @@ class ProductsTableSeeder extends Seeder
             'subtitle' => "subtitle for go4fun",
             'price' => 2330,
             'days' => "days for go4fun",
-            'description' => "description for go4fun",
-            'special_price' => "special_price for go4fun",
-            'rebate' => "rebate for go4fun",
+         
             'cardImage' => "cardImage",
-            'fee_description' => "fee_description for go4fun",
-            'days_plan' => "days_plan go4fun",       
+         
+            // 'popular_tour_id' => '1',
+            // 'special_deal_id' => 1 
         ]);
 
         DB::table('products')->insert([
@@ -29,12 +28,11 @@ class ProductsTableSeeder extends Seeder
             'subtitle' => "2subtitle for go4fun",
             'price' => 1330,
             'days' => "2days for go4fun",
-            'description' => "2description for go4fun",
-            'special_price' => "2special_price for go4fun",
-            'rebate' => "2rebate for go4fun",
+          
             'cardImage' => "2cardImage",
-            'fee_description' => "2fee_description for go4fun",
-            'days_plan' => "2days_plan go4fun",
+          
+            // 'popular_tour_id' => '2',
+            // 'special_deal_id' => 2  
             
         ]);
     }

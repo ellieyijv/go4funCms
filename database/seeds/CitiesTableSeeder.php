@@ -13,32 +13,38 @@ class CitiesTableSeeder extends Seeder
     {
         DB::table('cities')->insert([
             "name" =>"悉尼",
-            'countryId'=>"1"
-        ],
-        [
+            'country_id'=>"4"
+        ]);
+
+        DB::table('cities')->insert([
             "name" =>"珀斯",
-            'countryId'=>"1"
-        ],
-        [
+            'country_id'=>"4"
+        ]);
+
+        DB::table('cities')->insert([
             "name" =>"阿德莱德",
-            'countryId'=>"1"
-        ],
-        [
+            'country_id'=>"4"
+        ]);
+
+        DB::table('cities')->insert([
             "name" =>"黄金海岸",
-            'countryId'=>"1"
-        ],
-        [
+            'country_id'=>"4"
+        ]);
+
+        DB::table('cities')->insert([
             "name" =>"凯恩斯",
-            'countryId'=>"1"
-        ],
-        [
+            'country_id'=>"4"
+        ]);
+
+        DB::table('cities')->insert([
             "name" =>"布里斯班",
-            'countryId'=>"1"
-        ],
-        [
+            'country_id'=>"4"
+        ]);
+
+        DB::table('cities')->insert([
             "name" =>"墨尔本",
-            'countryId'=>"1"
-        ]
-        );
+            'country_id'=>"4"
+        ]);
+      
     }
 }

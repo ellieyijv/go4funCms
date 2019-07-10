@@ -6,11 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\AboutUs;
 
 
-class aboutusController extends Controller
+class AboutUsController extends Controller
 {
     public function index(){
         $data = AboutUs::get()->all();
-        return $this->jsonResponse($data);
-       
+        return $this->jsonResponse($data);  
     }
 }

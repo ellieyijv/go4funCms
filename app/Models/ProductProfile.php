@@ -4,9 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PopularTour extends Model
+class ProductProfile extends Model
 {
-    //
     public function product()
     {
         return $this->belongsTo(Product::class);

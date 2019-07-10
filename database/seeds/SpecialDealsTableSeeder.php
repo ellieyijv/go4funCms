@@ -13,10 +13,12 @@ class SpecialDealsTableSeeder extends Seeder
     {
         DB::table('special_deals')->insert([
             'product_id' => 1,
+            'description' => "special deal 1",
         ]);
 
         DB::table('special_deals')->insert([
-            'product_id' => 2
+            'product_id' => 2,
+            'description' => "special deal 2",
         ]);
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePopularToursTable extends Migration
+class CreateProductCountriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreatePopularToursTable extends Migration
      */
     public function up()
     {
-        Schema::create('popular_tours', function (Blueprint $table) {
+        Schema::create('product_countries', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('product_id');
-            $table->string('description');
+            $table->unsignedInteger('country_id');
+            $table->unique(['product_id', 'country_id']);
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreatePopularToursTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('popular_tours');
+        Schema::dropIfExists('product_countries');
     }
 }

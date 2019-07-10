@@ -13,7 +13,7 @@ class AboutusTable extends Migration
      */
     public function up()
     {
-        Schema::create('aboutus', function (Blueprint $table) {
+        Schema::create('about_us', function (Blueprint $table) {
             $table->increments('id');
             $table->text("description");
             $table->string('aboutusImg');

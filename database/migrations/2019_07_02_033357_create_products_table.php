@@ -19,12 +19,9 @@ class CreateProductsTable extends Migration
             $table->string('subtitle');
             $table->decimal('price');
             $table->string('days');
-            $table->text('description');
-            $table->string('special_price');
-            $table->string('rebate');
-            $table->string('cardImage');
-            $table->text('fee_description');
-            $table->text('days_plan');
+            $table->string('cardImage');      
+            // $table->unsignedInteger('popular_tour_id');
+            // $table->unsignedInteger('special_deal_id');
             $table->timestamps();
         });
     }

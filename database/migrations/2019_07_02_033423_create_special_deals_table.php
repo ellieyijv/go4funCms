@@ -16,6 +16,7 @@ class CreateSpecialDealsTable extends Migration
         Schema::create('special_deals', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('product_id');
+            $table->string('description');
             $table->timestamps();
         });
     }

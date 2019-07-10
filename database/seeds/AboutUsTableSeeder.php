@@ -11,7 +11,7 @@ class AboutUsTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('aboutus')->insert([
+        DB::table('about_us')->insert([
            "description"=>"南半球的热情在这里绽放，时尚、优雅、活力、传奇，伴随着慵懒的海湾，狂欢！火车一般是从墨尔本南十字火车站出发，从墨尔本到吉朗。其中从墨尔本到吉朗是火车线，周一至周五高峰时期十几分钟一趟，周六、周日基本每个小时都有一趟。",
             'aboutusImg'=>"/img/aboutus.png",
             'herobannerImg'=>"/img/aboutus.png",
