@@ -13,6 +13,6 @@ class City extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'product_cities');a
+        return $this->belongsToMany(Product::class, 'product_cities');
     }
 }
