@@ -16,9 +16,12 @@ class ProductsTableSeeder extends Seeder
             'subtitle' => "subtitle for go4fun",
             'price' => 2330,
             'days' => "days for go4fun",
-         
             'cardImage' => "cardImage",
-         
+            'description' => "description for go4fun",
+            'special_price' => "special_price for go4fun",
+            'rebate' => "rebate for go4fun",
+            'fee_description' => "fee_description for go4fun",
+            'days_plan' => "days_plan go4fun",  
             // 'popular_tour_id' => '1',
             // 'special_deal_id' => 1 
         ]);
@@ -27,13 +30,13 @@ class ProductsTableSeeder extends Seeder
             'title' => "2travel for Sydney",
             'subtitle' => "2subtitle for go4fun",
             'price' => 1330,
-            'days' => "2days for go4fun",
-          
+            'days' => "2days for go4fun", 
             'cardImage' => "2cardImage",
-          
-            // 'popular_tour_id' => '2',
-            // 'special_deal_id' => 2  
-            
+            'description' => "description for go4fun",
+            'special_price' => "special_price for go4fun",
+            'rebate' => "rebate for go4fun",
+            'fee_description' => "fee_description for go4fun",
+            'days_plan' => "days_plan go4fun",  
         ]);
     }
 }

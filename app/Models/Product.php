@@ -18,11 +18,6 @@ class Product extends Model
         return $this->hasOne(PopularTour::class);
     }
 
-    public function profile()
-    {
-        return $this->hasOne(ProductProfile::class);
-    }
-
     public function cities()
     {  
         return $this->belongsToMany(City::class, 'product_cities');   
