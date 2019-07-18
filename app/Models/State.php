@@ -4,17 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Country extends Model
+class State extends Model
 {
-
     public function cities()
     {
-        return $this->hasMany(City::class);
+        return $this->hasMany(City::class, 'city_id');
     }
 
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'product_countries');
+        return $this->hasMany(Product::class);
     }
- 
 }

@@ -15,16 +15,26 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title');
-            $table->string('subtitle');
+            $table->unsignedInteger('product_code');
+            $table->string('product_name');
+            $table->unsignedTinyInteger('duration');
+            $table->string('product_description');
+            $table->decimal('sales_price');
             $table->decimal('price');
-            $table->string('days');
-            $table->string('cardImage');  
-            $table->text('description');
-            $table->string('special_price');
-            $table->string('rebate');
-            $table->text('fee_description');
-            $table->text('days_plan');    
+            $table->string('price_description');
+            $table->string('tour_language');
+            $table->string('pick-up_service');
+            $table->string('meals');
+            $table->string('policy');
+            $table->string('travel_document');
+            $table->string('flyer');
+            $table->string('card_image');  
+            $table->text("description_image");
+            $table->text("inclusion");
+            $table->text("exclusion");
+            $table->text("terms_conditions");
+            $table->text("ltinerary");
+            $table->integer("state_id");
             // $table->unsignedInteger('popular_tour_id');
             // $table->unsignedInteger('special_deal_id');
             $table->timestamps();

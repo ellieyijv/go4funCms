@@ -17,7 +17,6 @@ class CreateSpotsTable extends Migration
             $table->increments('id');
             $table->string('iamge');
             $table->string('name');
-            $table->unsignedTinyInteger('status');
             $table->timestamps();
         });
     }

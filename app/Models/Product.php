@@ -23,9 +23,9 @@ class Product extends Model
         return $this->belongsToMany(City::class, 'product_cities');   
     }
 
-    public function countries()
+    public function state()
     {
-        return $this->belongsToMany(Country::class, 'product_countries');   
+        return $this->belongsTo(State::class);   
     }
 
     public function spots()

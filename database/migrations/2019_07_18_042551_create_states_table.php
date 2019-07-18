@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProductCountriesTable extends Migration
+class CreateStatesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateProductCountriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('product_countries', function (Blueprint $table) {
+        Schema::create('states', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('product_id');
-            $table->unsignedInteger('country_id');
-            $table->unique(['product_id', 'country_id']);
+            $table->string('name');
             $table->timestamps();
+           
         });
     }
 
@@ -29,6 +28,6 @@ class CreateProductCountriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_countries');
+        Schema::dropIfExists('states');
     }
 }

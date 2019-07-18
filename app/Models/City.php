@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class City extends Model
 {
-    public function country()
+    public function state()
     {
-        return $this->belongsTo(Country::class);
+        return $this->belongsTo(State::class);
     }
 
     public function products()
