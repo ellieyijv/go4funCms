@@ -7,7 +7,20 @@
 
 @section('css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
-  
+    <style>
+        iframe{
+            height:200px !important;
+        }
+        .mce-statusbar .mce-container-body{
+            display:none;
+        }
+        /* don't show the empty part of media picker */
+        .dd-empty{
+            display:none;
+        }
+
+    </style>
+
 @stop
 
 @section('page_title', __('voyager::generic.'.($edit ? 'edit' : 'add')).' '.$dataType->display_name_singular)
@@ -52,49 +65,86 @@
                             <!-- Adding / Editing -->
                             @php
                                 $dataTypeRows = $dataType->{($edit ? 'editRows' : 'addRows' )};
+                                //split collection to two part adapting to layout
+                                list($overview, $description) = $dataTypeRows->chunk(14);
                             @endphp
 
                             <div class="form-group col-md-12">
                                 <h5 style="font-weight: bold">OVERVIEW</h5>
                             </div> 
-                            @php
-                        
-                            @endphp
-                            @foreach($dataTypeRows as $row)
+                            @foreach($overview as $row)                    
                                 <!-- GET THE DISPLAY OPTIONS -->
                                 @php
-                                    $display_options = $row->details->display ?? NULL;
-                                    if ($dataTypeContent->{$row->field.'_'.($edit ? 'edit' : 'add')}) {
-                                        $dataTypeContent->{$row->field} = $dataTypeContent->{$row->field.'_'.($edit ? 'edit' : 'add')};
-                                    }
+                                $display_options = $row->details->display ?? NULL;
+                                if ($dataTypeContent->{$row->field.'_'.($edit ? 'edit' : 'add')}) {
+                                    $dataTypeContent->{$row->field} = $dataTypeContent->{$row->field.'_'.($edit ? 'edit' : 'add')};
+                                }
                                 @endphp
                                 @if (isset($row->details->legend) && isset($row->details->legend->text))
-                                    <legend class="text-{{ $row->details->legend->align ?? 'center' }}" style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">{{ $row->details->legend->text }}</legend>
+                                <legend class="text-{{ $row->details->legend->align ?? 'center' }}" style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">{{ $row->details->legend->text }}</legend>
                                 @endif
-                               
-                                <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 3 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
-                                    {{ $row->slugify }}
-                                    <label class="control-label" for="name">{{ $row->display_name }}</label>
-                                    @include('voyager::multilingual.input-hidden-bread-edit-add')
-                                    @if (isset($row->details->view))
-                                        @include($row->details->view, ['row' => $row, 'dataType' => $dataType, 'dataTypeContent' => $dataTypeContent, 'content' => $dataTypeContent->{$row->field}, 'action' => ($edit ? 'edit' : 'add')])
-                                    @elseif ($row->type == 'relationship')
-                                        @include('voyager::formfields.relationship', ['options' => $row->details])
-                                    @else
-                                        {!! app('voyager')->formField($row, $dataType, $dataTypeContent) !!}
-                                    @endif
 
-                                    @foreach (app('voyager')->afterFormFields($row, $dataType, $dataTypeContent) as $after)
-                                        {!! $after->handle($row, $dataType, $dataTypeContent) !!}
+                                <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 3 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
+                                {{ $row->slugify }}
+                                <label class="control-label" for="name">{{ $row->display_name }}</label>
+                                @include('voyager::multilingual.input-hidden-bread-edit-add')
+                                @if (isset($row->details->view))
+                                    @include($row->details->view, ['row' => $row, 'dataType' => $dataType, 'dataTypeContent' => $dataTypeContent, 'content' => $dataTypeContent->{$row->field}, 'action' => ($edit ? 'edit' : 'add')])
+                                @elseif ($row->type == 'relationship')
+                                    @include('voyager::formfields.relationship', ['options' => $row->details])
+                                @else
+                                    {!! app('voyager')->formField($row, $dataType, $dataTypeContent) !!}
+                                @endif
+
+                                @foreach (app('voyager')->afterFormFields($row, $dataType, $dataTypeContent) as $after)
+                                    {!! $after->handle($row, $dataType, $dataTypeContent) !!}
+                                @endforeach
+                                @if ($errors->has($row->field))
+                                    @foreach ($errors->get($row->field) as $error)
+                                        <span class="help-block">{{ $error }}</span>
                                     @endforeach
-                                    @if ($errors->has($row->field))
-                                        @foreach ($errors->get($row->field) as $error)
-                                            <span class="help-block">{{ $error }}</span>
-                                        @endforeach
-                                    @endif
+                                @endif
                                 </div>
                             @endforeach
+                            
+                            <!--description part -->
+                            <div class="form-group col-md-12" style="border-top: 2px solid #f9f9f9; margin-top:50px;">
+                                <h5 style="font-weight: bold; padding-top:20px">DESCRIPTION</h5>
+                            </div> 
+                            @foreach($description as $row)                    
+                                <!-- GET THE DISPLAY OPTIONS -->
+                                @php
+                                $display_options = $row->details->display ?? NULL;
+                                if ($dataTypeContent->{$row->field.'_'.($edit ? 'edit' : 'add')}) {
+                                    $dataTypeContent->{$row->field} = $dataTypeContent->{$row->field.'_'.($edit ? 'edit' : 'add')};
+                                }
+                                @endphp
+                                @if (isset($row->details->legend) && isset($row->details->legend->text))
+                                <legend class="text-{{ $row->details->legend->align ?? 'center' }}" style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">{{ $row->details->legend->text }}</legend>
+                                @endif
 
+                                <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 4 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
+                                {{ $row->slugify }}
+                                <label class="control-label" for="name">{{ $row->display_name }}</label>
+                                @include('voyager::multilingual.input-hidden-bread-edit-add')
+                                @if (isset($row->details->view))
+                                    @include($row->details->view, ['row' => $row, 'dataType' => $dataType, 'dataTypeContent' => $dataTypeContent, 'content' => $dataTypeContent->{$row->field}, 'action' => ($edit ? 'edit' : 'add')])
+                                @elseif ($row->type == 'relationship')
+                                    @include('voyager::formfields.relationship', ['options' => $row->details])
+                                @else
+                                    {!! app('voyager')->formField($row, $dataType, $dataTypeContent) !!}
+                                @endif
+
+                                @foreach (app('voyager')->afterFormFields($row, $dataType, $dataTypeContent) as $after)
+                                    {!! $after->handle($row, $dataType, $dataTypeContent) !!}
+                                @endforeach
+                                @if ($errors->has($row->field))
+                                    @foreach ($errors->get($row->field) as $error)
+                                        <span class="help-block">{{ $error }}</span>
+                                    @endforeach
+                                @endif
+                                </div>
+                            @endforeach
                         </div><!-- panel-body -->
 
                         <div class="panel-footer">
@@ -159,7 +209,8 @@
         // $(function () {
         // $('[data-toggle="popover"]').popover("http://192.168.15.195/admin/media")
         // })
-
+        
+        //disable the duration 
 
         function deleteHandler(tag, isMulti) {
           return function() {
@@ -180,21 +231,9 @@
         }
 
         $('document').ready(function () {
+            $('[name="duration"]').prop('disabled', true);
+
             $('.toggleswitch').bootstrapToggle();
-
-            //Init datepicker for date fields if data-datepicker attribute defined
-            //or if browser does not handle date inputs
-            $('.form-group input[type=date]').each(function (idx, elt) {
-                if (elt.type != 'date' || elt.hasAttribute('data-datepicker')) {
-                    elt.type = 'text';
-                    $(elt).datetimepicker($(elt).data('datepicker'));
-                }
-            });
-
-            @if ($isModelTranslatable)
-                $('.side-body').multilingual({"editing": true});
-            @endif
-
             $('.side-body input[data-slug-origin]').each(function(i, el) {
                 $(el).slugify();
             });

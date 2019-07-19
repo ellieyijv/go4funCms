@@ -32,4 +32,9 @@ class Product extends Model
     {
         return $this->belongsToMany(Spot::class, 'product_spots');   
     }
+
+    public function recommends(){
+        $recommends = $this->belongsToMany('Product', 'product_recommends', 'product_id', 'recommend_id');
+        return $recommends;
+    }
 }
