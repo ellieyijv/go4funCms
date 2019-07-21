@@ -17,13 +17,13 @@ class CreateProductsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('product_code');
             $table->string('product_name');
-            $table->unsignedTinyInteger('duration');
+            $table->unsignedTinyInteger('duration')->default(0);
             $table->string('product_description');
             $table->decimal('sales_price');
             $table->decimal('price');
             $table->string('price_description');
             $table->string('tour_language');
-            $table->string('pick-up_service');
+            $table->string('pick_up_service');
             $table->string('meals');
             $table->string('policy');
             $table->string('travel_document');

@@ -106,6 +106,7 @@ class ProductsController extends VoyagerBaseController
         if (view()->exists("voyager::$slug.browse")) {
             $view = "voyager::$slug.browse";
         }
+
         return Voyager::view($view, compact(
             'dataType',
             'dataTypeContent',

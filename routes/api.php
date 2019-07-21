@@ -29,3 +29,5 @@ Route::get("{country}/cities", "CountryController@index");
 Route::get("{country}/products", "CountryController@getCountryProducts");
 
 Route::get("/{product}/spots", "SpotController@getProductSpots");
+
+Route::get("/{product}/recommends", "ProductRecommendsController@index");

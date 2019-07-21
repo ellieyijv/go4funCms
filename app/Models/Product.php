@@ -34,7 +34,7 @@ class Product extends Model
     }
 
     public function recommends(){
-        $recommends = $this->belongsToMany('Product', 'product_recommends', 'product_id', 'recommend_id');
+        $recommends = $this->belongsToMany(Product::class, 'product_recommends', 'product_id', 'recommend_id');
         return $recommends;
     }
 }
