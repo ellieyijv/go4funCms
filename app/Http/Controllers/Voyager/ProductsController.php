@@ -12,6 +12,8 @@ use TCG\Voyager\Events\BreadImagesDeleted;
 use TCG\Voyager\Facades\Voyager;
 use TCG\Voyager\Http\Controllers\Traits\BreadRelationshipParser;
 use TCG\Voyager\Http\Controllers\VoyagerBaseController;
+
+
 use Validator;
 class ProductsController extends VoyagerBaseController
 {
@@ -182,7 +184,7 @@ class ProductsController extends VoyagerBaseController
     //****************************************
     public function edit(Request $request, $id)
     {
-      
+        
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -221,6 +223,7 @@ class ProductsController extends VoyagerBaseController
         if (view()->exists("voyager::$slug.edit-add")) {
             $view = "voyager::$slug.edit-add";
         }
+      
 
         return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
     }
@@ -228,6 +231,7 @@ class ProductsController extends VoyagerBaseController
     // POST BR(E)AD
     public function update(Request $request, $id)
     {
+        dd($request->recommends_product_belongstomany_products);
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -247,7 +251,7 @@ class ProductsController extends VoyagerBaseController
 
         // Check permission
         $this->authorize('edit', $data);
-
+        
         // Validate fields with ajax
         $val = $this->validateBread($request->all(), $dataType->editRows, $dataType->name, $id)->validate();
         $this->insertUpdateData($request, $slug, $dataType->editRows, $data);
@@ -304,6 +308,7 @@ class ProductsController extends VoyagerBaseController
      */
     public function store(Request $request)
     {
+        
         $slug = $this->getSlug($request);
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
         // Check permission

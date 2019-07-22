@@ -107,6 +107,13 @@
                                 </div>
                             @endforeach
                             
+                            <div class="form-group  col-md-6 ">
+                                
+                                <label class="control-label" for="name">Recommended Products(Limit 3)</label>
+                                <select class="form-control recommends_select select2-taggable select2-hidden-accessible" name="recommends_product_belongstomany_products[]" multiple  data-select2-id="20" tabindex="-1" aria-hidden="true">
+                                    
+                                </select>
+                            </div>
                             <!--description part -->
                             <div class="form-group col-md-12" style="border-top: 2px solid #f9f9f9; margin-top:50px;">
                                 <h5 style="font-weight: bold; padding-top:20px">DESCRIPTION</h5>
@@ -184,6 +191,7 @@
                     <h4>{{ __('voyager::generic.are_you_sure_delete') }} '<span class="confirm_delete_name"></span>'</h4>
                 </div>
 
+                
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">{{ __('voyager::generic.cancel') }}</button>
                     <button type="button" class="btn btn-danger" id="confirm_delete">{{ __('voyager::generic.delete_confirm') }}</button>
@@ -198,12 +206,12 @@
     <script>
         var params = {};
         var $file;
-
-    
-        // // Initialize tooltip component
-        // $(function () {
-        // $('[data-toggle="tooltip"]').tooltip()
-        // })
+       
+      
+        // Initialize tooltip component
+        $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+        })
 
         // // Initialize popover component
         // $(function () {
@@ -211,7 +219,6 @@
         // })
         
         //disable the duration 
-
         function deleteHandler(tag, isMulti) {
           return function() {
             $file = $(this).siblings(tag);
@@ -229,7 +236,7 @@
             $('#confirm_delete_modal').modal('show');
           };
         }
-
+        
         $('document').ready(function () {
             $('[name="duration"]').prop('disabled', true);
 
@@ -237,7 +244,39 @@
             $('.side-body input[data-slug-origin]').each(function(i, el) {
                 $(el).slugify();
             });
+     
+           $(".recommends_select").select2({
+                minimumInputLength: 3,
+                multiple:true,
+                ajax: {
+                    url: "http://localhost/api/products",
+                    dataType: 'json',
+                    type: "GET",
+                    // quietMillis: 50,
+                    processResults: function (data) {
+                        var item = data.map(function (obj) {
+                            let entity = {};
+                            entity.id = obj.product_code;
+                            entity.text = obj.product_name; 
+                            return entity;
+                        });
+                        console.log(item);
+                        return  {
+                            results: item,
+                        }
+                    
+                    }
+                }
+            });
+          
+            // $(".recommends_select").change(function() {
 
+            //     var selections = ( JSON.stringify($(".recommends_select").select2('data')) );
+            
+            //     console.log('Selected options: ' + selections);
+                
+              
+            // });
             $('.form-group').on('click', '.remove-multi-image', deleteHandler('img', true));
             $('.form-group').on('click', '.remove-single-image', deleteHandler('img', false));
             $('.form-group').on('click', '.remove-multi-file', deleteHandler('a', true));

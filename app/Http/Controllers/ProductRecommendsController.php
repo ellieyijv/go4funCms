@@ -13,4 +13,16 @@ class ProductRecommendsController extends Controller
 
         return $this->jsonResponse($recommends);
     }
+
+    public function getProductByTerm(Request $request){
+        $term = $request->input('term');
+        $recommendProduct = Product::where(function($q) use ($term){
+            $q->where('product_code','like', "%$term%")
+              ->orWhere('product_name', 'like', "%$term%");
+        })
+        ->get();
+        return $this->jsonResponse($recommendProduct);
+    }
+
+
 }
