@@ -246,7 +246,7 @@
             });
      
            $(".recommends_select").select2({
-                minimumInputLength: 3,
+                minimumInputLength: 2,
                 multiple:true,
                 ajax: {
                     url: "http://localhost/api/products",

@@ -231,7 +231,11 @@ class ProductsController extends VoyagerBaseController
     // POST BR(E)AD
     public function update(Request $request, $id)
     {
-        dd($request->recommends_product_belongstomany_products);
+        dd($request);
+        $product = App\Models\Product::find($id);
+        $product->recommends()->attach($request->recommends_product_belongstomany_products);
+        unset($request['recommends_product_belongstomany_products']);
+        dd($request);
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();

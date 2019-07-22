@@ -18,6 +18,8 @@ class CreateProductRecommends extends Migration
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('recommend_id');
             $table->unique(['product_id', 'recommend_id']);
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->foreigh('recommend_id')->references('id')->on('prdocuts')->onDelete('cascade');
             $table->timestamps();
         });
     }
