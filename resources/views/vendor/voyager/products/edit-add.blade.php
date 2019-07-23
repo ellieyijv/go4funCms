@@ -64,7 +64,13 @@
 
                             <!-- Adding / Editing -->
                             @php
+                                if(!$edit){
+                                    $recommends = [];
+                                    $ltinerary =[];
+                                }
+                            
                                 $dataTypeRows = $dataType->{($edit ? 'editRows' : 'addRows' )};
+                              
                                 //split collection to two part adapting to layout
                                 list($overview, $description) = $dataTypeRows->chunk(14);
                             @endphp
@@ -107,11 +113,13 @@
                                 </div>
                             @endforeach
                             
-                            <div class="form-group  col-md-6 ">
+                            <div class="form-group col-md-6 recommends">
                                 
                                 <label class="control-label" for="name">Recommended Products(Limit 3)</label>
-                                <select class="form-control recommends_select select2-taggable select2-hidden-accessible" name="recommends_product_belongstomany_products[]" multiple  data-select2-id="20" tabindex="-1" aria-hidden="true">
-                                    
+                                <select class="form-control  recommends_select select2-taggable select2-hidden-accessible" name="recommends_product_belongstomany_products[]" multiple  data-select2-id="20" tabindex="-1" aria-hidden="true">
+                                  @foreach($recommends as $recommend)
+                                    <option value="{{$recommend->id}}" selected>{{$recommend->product_name}}</option>
+                                  @endforeach
                                 </select>
                             </div>
                             <!--description part -->
@@ -152,8 +160,28 @@
                                 @endif
                                 </div>
                             @endforeach
+                            <div class="form-group col-md-12" >
+                                <h5>Ltinerary </h5>
+                                <button type="button" class="btn btn-success" id="add_days_btn">Add Days</button>     
+                            </div> 
+                            <div class="form-group col-md-12 addDays" >
+                               
+                                <ul>
+                                    <li class="day">
+                                      
+                                        <div>
+                                            <textarea name="day_text"></textarea>
+                                            <button class="add_day">+</button>
+                                            <button class="delete_day">-</button>
+                                        </div>
+                                    
+                                    </li> 
+                                </ul>
+                                  
+                            </div> 
+                            
                         </div><!-- panel-body -->
-
+                        
                         <div class="panel-footer">
                             @section('submit-buttons')
                                 <button type="submit" class="btn btn-primary save">{{ __('voyager::generic.save') }}</button>
@@ -206,11 +234,12 @@
     <script>
         var params = {};
         var $file;
-       
+        var edit = {!! $edit = $edit ?: 0 !!} ;
       
+       
         // Initialize tooltip component
         $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
+            $('[data-toggle="tooltip"]').tooltip()
         })
 
         // // Initialize popover component
@@ -238,14 +267,15 @@
         }
         
         $('document').ready(function () {
+               
             $('[name="duration"]').prop('disabled', true);
 
             $('.toggleswitch').bootstrapToggle();
             $('.side-body input[data-slug-origin]').each(function(i, el) {
                 $(el).slugify();
             });
-     
-           $(".recommends_select").select2({
+            
+            $(".recommends_select").select2({
                 minimumInputLength: 2,
                 multiple:true,
                 ajax: {
@@ -256,11 +286,11 @@
                     processResults: function (data) {
                         var item = data.map(function (obj) {
                             let entity = {};
-                            entity.id = obj.product_code;
+                            entity.id = obj.id;
                             entity.text = obj.product_name; 
                             return entity;
                         });
-                        console.log(item);
+                       
                         return  {
                             results: item,
                         }
@@ -268,15 +298,8 @@
                     }
                 }
             });
-          
-            // $(".recommends_select").change(function() {
 
-            //     var selections = ( JSON.stringify($(".recommends_select").select2('data')) );
-            
-            //     console.log('Selected options: ' + selections);
-                
-              
-            // });
+          
             $('.form-group').on('click', '.remove-multi-image', deleteHandler('img', true));
             $('.form-group').on('click', '.remove-single-image', deleteHandler('img', false));
             $('.form-group').on('click', '.remove-multi-file', deleteHandler('a', true));
@@ -300,5 +323,18 @@
             });
             $('[data-toggle="tooltip"]').tooltip();
         });
+
+        if(edit){
+            $('#add_days_btn').css('display', 'none');
+        }else{
+            $('#add_days_btn').on('click', function(){
+                $('.day').css('display', 'inline-block');
+            })
+        }
+        $('.add_day').on('click', function(){
+
+        })
+
+       
     </script>
 @stop

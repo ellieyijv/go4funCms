@@ -12,7 +12,7 @@ use TCG\Voyager\Events\BreadImagesDeleted;
 use TCG\Voyager\Facades\Voyager;
 use TCG\Voyager\Http\Controllers\Traits\BreadRelationshipParser;
 use TCG\Voyager\Http\Controllers\VoyagerBaseController;
-
+use App\Models\Product;
 
 use Validator;
 class ProductsController extends VoyagerBaseController
@@ -184,7 +184,7 @@ class ProductsController extends VoyagerBaseController
     //****************************************
     public function edit(Request $request, $id)
     {
-        
+      
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -223,19 +223,23 @@ class ProductsController extends VoyagerBaseController
         if (view()->exists("voyager::$slug.edit-add")) {
             $view = "voyager::$slug.edit-add";
         }
-      
+        
+        $recommends = Product::find($id)->recommends->all();
 
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'recommends'));
     }
 
     // POST BR(E)AD
     public function update(Request $request, $id)
     {
-        dd($request);
-        $product = App\Models\Product::find($id);
-        $product->recommends()->attach($request->recommends_product_belongstomany_products);
-        unset($request['recommends_product_belongstomany_products']);
-        dd($request);
+       
+        $product = Product::find($id);
+    
+        if($product->recommends()->sync($request->recommends_product_belongstomany_products))
+        {
+            unset($request['recommends_product_belongstomany_products']);
+        }
+        
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -312,7 +316,6 @@ class ProductsController extends VoyagerBaseController
      */
     public function store(Request $request)
     {
-        
         $slug = $this->getSlug($request);
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
         // Check permission
@@ -321,6 +324,8 @@ class ProductsController extends VoyagerBaseController
         $val = $this->validateBread($request->all(), $dataType->addRows)->validate();
         $data = $this->insertUpdateData($request, $slug, $dataType->addRows, new $dataType->model_name());
         event(new BreadDataAdded($dataType, $data));
+        $product = Product::find($data->id);
+        $product->recommends()->attach($request->recommends_product_belongstomany_products);
         return redirect()
         ->route("voyager.{$dataType->slug}.index")
         ->with([
