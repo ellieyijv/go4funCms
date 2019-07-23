@@ -19,6 +19,20 @@
             display:none;
         }
 
+        #container{
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+           
+        }
+
+        .delete_day{
+            margin:30px;
+        }
+
+        .participantRow input{
+            width:50px;
+        }
     </style>
 
 @stop
@@ -162,24 +176,56 @@
                             @endforeach
                             <div class="form-group col-md-12" >
                                 <h5>Ltinerary </h5>
-                                <button type="button" class="btn btn-success" id="add_days_btn">Add Days</button>     
+                                {{-- <button type="button" class="btn btn-success" id="add_days_btn">Add Days</button>     
                             </div> 
-                            <div class="form-group col-md-12 addDays" >
-                               
-                                <ul>
-                                    <li class="day">
-                                      
-                                        <div>
-                                            <textarea name="day_text"></textarea>
-                                            <button class="add_day">+</button>
-                                            <button class="delete_day">-</button>
-                                        </div>
+                            <div class="form-group col-md-12 addDays" >                             
+                                                                
+                                <div id="container">
+                                    <textarea name="day_text" class="form-control" rows="5"></textarea>
+                                    <button type="button" class="btn btn-danger delete_day">Remove Day</button>
+                                </div>                                    --}}
+                                <label>Add the 
+                                        <select id="participants" class="input-mini required-entry">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                            <option value="12">12</option>
+                                            <option value="13">13</option>
+                                            <option value="14">14</option>
+                                            <option value="15">15</option>
+                                        </select> days</label>
                                     
-                                    </li> 
-                                </ul>
-                                  
+                                    <table class="table table-hover" id="participantTable">
+                                            <thead>
+                                                <tr>
+                                                    <th>&nbsp;</th>
+                                                    <th>The No. Day</th>
+                                                    <th>description</th>
+                                                </tr>
+                                            </thead>
+                                            <tr class="participantRow">
+                                                <td>&nbsp;</td>
+                                                <td><input name="" id="" type="number" >
+                                                  </td>
+                                                <td  width="70%">
+                                                    <textarea name="day_text" class="form-control" rows="3"></textarea>
+                                                </td>
+                                                <td><button class="btn btn-danger remove" type="button">Remove</button></td>
+                                            </tr>
+                                            <tr id="addButtonRow">
+                                                <td colspan="4"><center><button class="btn btn-large btn-success add" type="button">Add</button></center></td>
+                                            </tr>
+                                    </table>                             
                             </div> 
-                            
+                      
                         </div><!-- panel-body -->
                         
                         <div class="panel-footer">
@@ -299,7 +345,7 @@
                 }
             });
 
-          
+         
             $('.form-group').on('click', '.remove-multi-image', deleteHandler('img', true));
             $('.form-group').on('click', '.remove-single-image', deleteHandler('img', false));
             $('.form-group').on('click', '.remove-multi-file', deleteHandler('a', true));
@@ -324,16 +370,67 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
 
-        if(edit){
-            $('#add_days_btn').css('display', 'none');
-        }else{
-            $('#add_days_btn').on('click', function(){
-                $('.day').css('display', 'inline-block');
-            })
-        }
-        $('.add_day').on('click', function(){
+        
+        /* Variables */
+        var p = $("#participants").val();
+        var row = $(".participantRow");
 
-        })
+        /* Functions */
+        function getP(){
+            p = $("#participants").val();
+        }
+
+        function addRow() {
+            row.clone(true, true).appendTo("#participantTable");
+        }
+
+        function removeRow(button) {
+            button.closest("tr").remove();
+        }
+        /* Doc ready */
+        $(".add").on('click', function () {
+        getP();
+        if($("#participantTable tr").length < 17) {
+            addRow();
+            var i = Number(p)+1;
+            $("#participants").val(i);
+        }
+        $(this).closest("tr").appendTo("#participantTable");
+        if ($("#participantTable tr").length === 3) {
+            $(".remove").hide();
+        } else {
+            $(".remove").show();
+        }
+        });
+        $(".remove").on('click', function () {
+            getP();
+            if($("#participantTable tr").length === 3) {
+                //alert("Can't remove row.");
+                $(".remove").hide();
+            } else if($("#participantTable tr").length - 1 ==3) {
+                $(".remove").hide();
+                removeRow($(this));
+                var i = Number(p)-1;
+                $("#participants").val(i);
+            } else {
+                removeRow($(this));
+                var i = Number(p)-1;
+                $("#participants").val(i);
+            }
+            });
+            $("#participants").change(function () {
+            var i = 0;
+            p = $("#participants").val();
+            var rowCount = $("#participantTable tr").length - 2;
+            if(p > rowCount) {
+                for(i=rowCount; i<p; i+=1){
+                    addRow();
+                }
+                $("#participantTable #addButtonRow").appendTo("#participantTable");
+            } else if(p < rowCount) {
+            }
+        });
+
 
        
     </script>
