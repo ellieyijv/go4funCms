@@ -224,22 +224,21 @@ class ProductsController extends VoyagerBaseController
             $view = "voyager::$slug.edit-add";
         }
         
-        $recommends = Product::find($id)->recommends->all();
-
+        $recommends = $dataTypeContent->recommends->all();
+  
         return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'recommends'));
     }
 
     // POST BR(E)AD
     public function update(Request $request, $id)
     {
-       
         $product = Product::find($id);
-    
         if($product->recommends()->sync($request->recommends_product_belongstomany_products))
         {
             unset($request['recommends_product_belongstomany_products']);
         }
-        
+        $product->ltinerary = json_encode($request->ltinerary);
+        $product->save();
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
