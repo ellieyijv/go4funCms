@@ -5,6 +5,8 @@
    
 @endphp
 
+
+
 @extends('voyager::master')
 
 @section('css')
@@ -34,6 +36,20 @@
 
         .participantRow input{
             width:50px;
+        }
+
+        .upload-file-modal{
+            position:absolute;
+            background-color: #f9f9f9;
+            left: 15px;
+            z-index: 2;
+
+        }
+
+        h5{
+            font-weight: bold;
+            color:black;
+            font-size:20px;
         }
     </style>
 
@@ -84,14 +100,14 @@
                                     $recommends = [];
                                     $ltinerary =[];
                                 }
-                              
+                               
                                 $dataTypeRows = $dataType->{($edit ? 'editRows' : 'addRows' )};
                                 //split collection to two part adapting to layout
                                 list($overview, $description) = $dataTypeRows->chunk(14);
                             @endphp
 
                             <div class="form-group col-md-12">
-                                <h5 style="font-weight: bold">OVERVIEW</h5>
+                                <h5>Overview</h5>
                             </div> 
                             @foreach($overview as $row)                    
                                 <!-- GET THE DISPLAY OPTIONS -->
@@ -114,6 +130,7 @@
                                 @elseif ($row->type == 'relationship')
                                     @include('voyager::formfields.relationship', ['options' => $row->details])
                                 @else
+                                    
                                     {!! app('voyager')->formField($row, $dataType, $dataTypeContent) !!}
                                 @endif
 
@@ -139,7 +156,7 @@
                             </div>
                             <!--description part -->
                             <div class="form-group col-md-12" style="border-top: 2px solid #f9f9f9; margin-top:50px;">
-                                <h5 style="font-weight: bold; padding-top:20px">DESCRIPTION</h5>
+                                <h5 style="padding-top:20px">description</h5>
                             </div> 
                             @foreach($description as $row)                    
                                 <!-- GET THE DISPLAY OPTIONS -->
@@ -148,12 +165,13 @@
                                 if ($dataTypeContent->{$row->field.'_'.($edit ? 'edit' : 'add')}) {
                                     $dataTypeContent->{$row->field} = $dataTypeContent->{$row->field.'_'.($edit ? 'edit' : 'add')};
                                 }
+                                
                                 @endphp
                                 @if (isset($row->details->legend) && isset($row->details->legend->text))
                                 <legend class="text-{{ $row->details->legend->align ?? 'center' }}" style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">{{ $row->details->legend->text }}</legend>
                                 @endif
-
-                                <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width ?? 4 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
+                                
+                                <div class="form-group @if($row->type == 'hidden') hidden @endif @if($row->type == 'rich_text_box') col-md-{{ $display_options->width ?? 6 }}@endif  col-md-{{ $display_options->width ?? 4 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
                                 {{ $row->slugify }}
                                 <label class="control-label" for="name">{{ $row->display_name }}</label>
                                 @include('voyager::multilingual.input-hidden-bread-edit-add')
@@ -182,18 +200,20 @@
                                     <button class="btn btn-large btn-success add" type="button">Add Days</button>
                                 </div>
                                     <table class="table table-hover" id="participantTable">  
+                                       
                                         @if(!empty($ltinerary))
                                             @foreach($ltinerary as $item) 
                                                 <tr class="participantRow col-md-6"> 
                                                     <td><input name="ltinerary[1][day]" id="" type="number" class="the-no-day" value={{$item->day}} >
                                                     </td>
                                                     <td  width="70%">
-                                                        <textarea name="ltinerary[1][description]" class="form-control day-description" rows="3" type="rich_text_box">{{$item->description}}</textarea>
+                                                        <textarea name="ltinerary[1][description]" class="form-control day-description richTextBox" rows="3">{{$item->description}}</textarea>
                                                     </td>
                                                     <td><button class="btn btn-danger remove" type="button">Remove</button></td>
                                                 </tr>
                                             @endforeach
                                         @endif
+                                     
                                     </table>                             
                             </div> 
                       
@@ -243,11 +263,25 @@
             </div>
         </div>
     </div>
-    <!-- End Delete File Modal -->
+   <!-- End Delete File Modal -->
+    <template id="itRow">
+        <tr class="participantRow col-md-6" >  
+                <td><input name="ltinerary[1][day]" id="" type="number" class="the-no-day" value="" >
+                </td>
+                <td  width="70%">
+                    <textarea name="ltinerary[1][description]" class="form-control day-description richTextBox" rows="3"></textarea>
+                </td>
+                <td><button class="btn btn-danger remove" type="button">Remove</button></td>
+        </tr>
+    </template>
+  
 @stop
 
 @section('javascript')
     <script>
+        new Vue({
+            el: '#filemanager'
+        });
         var params = {};
         var $file;
         var edit = {!! $edit = $edit ?: 0 !!} ;
@@ -342,14 +376,16 @@
         //////////////////////////////////////////////////////////
         
       
-        var row = $(".participantRow");
-        console.log(row);
+        var template = $("#itRow");
+        var node = template.prop('content');
+        var row = $(node).find('tr');
         function addRow() {
             row.clone(true, true).appendTo("#participantTable");
         }
 
         function removeRow(button) {
             button.closest("tr").remove();
+            
         }
         //add days event
         $(".add").on('click', function () {    
@@ -369,14 +405,15 @@
                         $(dayDescriptionSelector).val('');
                         $(dayDescriptionSelector).attr("name", "ltinerary["+rowIndex+"][description]");
                 } 
+                reloadTinyMce();
             }
         });
 
         //remove days event
-        $("button.remove").on('click', function () {   
-            console.log("remove record");
+        $('#participantTable').on('click', ".remove", function (event) {     
             removeRow($(this));
         });
-       
+    
+      
     </script>
 @stop

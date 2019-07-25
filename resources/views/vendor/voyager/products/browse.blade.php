@@ -85,6 +85,7 @@
                                                 <a href="{{ $row->sortByUrl($orderBy, $sortOrder) }}">
                                             @endif
                                             {{ $row->display_name }}
+                                           
                                             @if ($isServerSide)
                                                 @if ($row->isCurrentSortField($orderBy))
                                                     @if ($sortOrder == 'asc')
@@ -95,6 +96,7 @@
                                                 @endif
                                                 </a>
                                             @endif
+                                          
                                         </th>
                                         @endforeach
                                         <th class="actions text-right">{{ __('voyager::generic.actions') }}</th>
@@ -110,6 +112,7 @@
                                         @endcan
                                         @foreach($dataType->browseRows as $row)
                                             @php
+                                            
                                             if ($data->{$row->field.'_browse'}) {
                                                 $data->{$row->field} = $data->{$row->field.'_browse'};
                                             }
@@ -305,6 +308,14 @@
 @if(!$dataType->server_side && config('dashboard.data_tables.responsive'))
     <link rel="stylesheet" href="{{ voyager_asset('lib/css/responsive.dataTables.min.css') }}">
 @endif
+
+<style>
+    #bread-actions .view{
+        display:none;
+    }
+
+
+</style>
 @stop
 
 @section('javascript')
