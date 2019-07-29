@@ -16,7 +16,8 @@ class CreateStatesTable extends Migration
         Schema::create('states', function (Blueprint $table) {
             $table->increments('id');
             $table->string('state');
-            $table->string('iamge');
+            $table->string('banner_iamge');
+            $table->string('card_iamge');
             $table->timestamps();
            
         });

@@ -18,9 +18,15 @@ use Illuminate\Http\Request;
 // });
 
 
-Route::get("/specialdeals", "SpecialDealsController@index");
+Route::get("/specialdeals", "ProductAPIController@specialDeals");
 
-Route::get("/populartours", "PopularToursController@index");
+Route::get("/populartours", "ProductAPIController@popularTours");
+
+Route::get("/{product}/spots", "ProductAPIController@getProductSpots");
+
+Route::get("/{product}/recommends", "ProductAPIController@getProductRecommends");
+
+Route::get("/products", "ProductAPIController@getProductByTerm");
 
 Route::get("/aboutus", "AboutUsController@index");
 
@@ -28,8 +34,3 @@ Route::get("{country}/cities", "CountryController@index");
 
 Route::get("{country}/products", "CountryController@getCountryProducts");
 
-Route::get("/{product}/spots", "SpotController@getProductSpots");
-
-Route::get("/{product}/recommends", "ProductRecommendsController@index");
-
-Route::get("/products", "ProductRecommendsController@getProductByTerm");
