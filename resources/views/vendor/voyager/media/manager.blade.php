@@ -951,4 +951,8 @@
     min-width: 200px;
     max-width: 250px;
 }
+   /* don't show the empty part of media picker */
+.dd-empty{
+            display:none;
+        }
 </style>

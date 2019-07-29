@@ -18,10 +18,6 @@
         .mce-statusbar .mce-container-body{
             display:none;
         }
-        /* don't show the empty part of media picker */
-        .dd-empty{
-            display:none;
-        }
 
         #container{
             display: flex;
@@ -34,10 +30,27 @@
             margin:30px;
         }
 
-        .participantRow input{
-            width:50px;
+        .participantRow{
+            margin: 30px 0;
+            position: relative;
         }
 
+        .participantRow input{
+            border: 1px solid #eee;
+            padding: 5px;
+        }
+        
+        .participantRow .remove{
+            position: absolute;
+            right:15px;
+        }
+
+        #participantTable .duration{
+            font-size:14px;
+            font-weight:normal;
+            color:#76838f;
+            padding-left:15px;
+        }
         .upload-file-modal{
             position:absolute;
             background-color: #f9f9f9;
@@ -170,8 +183,12 @@
                                 @if (isset($row->details->legend) && isset($row->details->legend->text))
                                 <legend class="text-{{ $row->details->legend->align ?? 'center' }}" style="background-color: {{ $row->details->legend->bgcolor ?? '#f0f0f0' }};padding: 5px;">{{ $row->details->legend->text }}</legend>
                                 @endif
-                                
-                                <div class="form-group @if($row->type == 'hidden') hidden @endif @if($row->type == 'rich_text_box') col-md-{{ $display_options->width ?? 6 }}@endif  col-md-{{ $display_options->width ?? 4 }} {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
+                                {{-- add parent row class div --}}
+                                @if($row->display_name == 'Flyer')
+                                    <div class="row">
+                                @endif
+                                {{----------}}
+                                <div class="form-group @if($row->type == 'hidden') hidden @endif @if($row->type == 'rich_text_box') col-md-{{ $display_options->width ?? 6 }} @else col-md-{{ $display_options->width ?? 4 }}@endif {{ $errors->has($row->field) ? 'has-error' : '' }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
                                 {{ $row->slugify }}
                                 <label class="control-label" for="name">{{ $row->display_name }}</label>
                                 @include('voyager::multilingual.input-hidden-bread-edit-add')
@@ -191,30 +208,33 @@
                                         <span class="help-block">{{ $error }}</span>
                                     @endforeach
                                 @endif
+                                {{-- add parent row class div --}}
+                                @if($row->display_name == 'spots')
+                                    </div>
+                                @endif
+                                {{----------}}
                                 </div>
                             @endforeach
-                            <div class="form-group col-md-12" >
-                                <h5>Ltinerary </h5>
-                                <div id="addButtonRow">
+                            <div class="form-group row" id="participantTable">
+                                <h5 class="col-md-12">Ltinerary  <span class="duration"></span></h5>
+                                <div id="addButtonRow" class="col-md-12">
                                     <input style="width:30px" class="days-input">
                                     <button class="btn btn-large btn-success add" type="button">Add Days</button>
                                 </div>
-                                    <table class="table table-hover" id="participantTable">  
-                                       
-                                        @if(!empty($ltinerary))
-                                            @foreach($ltinerary as $item) 
-                                                <tr class="participantRow col-md-6"> 
-                                                    <td><input name="ltinerary[1][day]" id="" type="number" class="the-no-day" value={{$item->day}} >
-                                                    </td>
-                                                    <td  width="70%">
-                                                        <textarea name="ltinerary[1][description]" class="form-control day-description richTextBox" rows="3">{{$item->description}}</textarea>
-                                                    </td>
-                                                    <td><button class="btn btn-danger remove" type="button">Remove</button></td>
-                                                </tr>
-                                            @endforeach
-                                        @endif
                                      
-                                    </table>                             
+                                @if(!empty($ltinerary))
+                                     @foreach($ltinerary as $indexKey =>$item) 
+                                        <div class="participantRow col-md-6"> 
+                                             <p>Day</p>
+                                             <input name="ltinerary[{{$indexKey}}][day]" style="width:100%"  type="number" class="the-no-day" value="{{$item->day}}" readonly/>
+                                             <p>Ltinerary</p>       
+                                             <textarea name="ltinerary[{{$indexKey}}][description]" class="form-control day-description richTextBox" rows="3">{{$item->description}}</textarea>
+                                                   
+                                            <button class="btn btn-danger remove" type="button">Remove</button>
+                                        </div>
+                                    @endforeach
+                                 @endif
+                                                             
                             </div> 
                       
                         </div><!-- panel-body -->
@@ -265,14 +285,14 @@
     </div>
    <!-- End Delete File Modal -->
     <template id="itRow">
-        <tr class="participantRow col-md-6" >  
-                <td><input name="ltinerary[1][day]" id="" type="number" class="the-no-day" value="" >
-                </td>
-                <td  width="70%">
-                    <textarea name="ltinerary[1][description]" class="form-control day-description richTextBox" rows="3"></textarea>
-                </td>
-                <td><button class="btn btn-danger remove" type="button">Remove</button></td>
-        </tr>
+        <div class="participantRow col-md-6" >
+            <p>Day</p>
+            <input name="ltinerary[1][day]"  type="number" class="the-no-day" style="width:100%" readonly/>
+            <p>Ltinerary</p>  
+            <textarea name="ltinerary[1][description]" class="form-control day-description richTextBox" rows="3"></textarea>
+                
+            <button class="btn btn-danger remove ml-auto" type="button" >Remove</button>
+        </div>
     </template>
   
 @stop
@@ -285,7 +305,7 @@
         var params = {};
         var $file;
         var edit = {!! $edit = $edit ?: 0 !!} ;
-      
+        
        
         // Initialize tooltip component
         $(function () {
@@ -317,7 +337,7 @@
         }
         
         $('document').ready(function () {           
-            $('[name="duration"]').prop('disabled', true);
+            $('[name="duration"]').prop('readonly', true);
             $('.toggleswitch').bootstrapToggle();
             $('.side-body input[data-slug-origin]').each(function(i, el) {
                 $(el).slugify();
@@ -372,32 +392,33 @@
         });
 
         //////////////////////////////////////////////////////////
-        // add by Ellie
+        // added by Ellie
         //////////////////////////////////////////////////////////
         
       
         var template = $("#itRow");
         var node = template.prop('content');
-        var row = $(node).find('tr');
+        var row = $(node).find('.participantRow');
+
         function addRow() {
             row.clone(true, true).appendTo("#participantTable");
         }
 
         function removeRow(button) {
-            button.closest("tr").remove();
+            button.closest(".participantRow").remove();
             
         }
         //add days event
         $(".add").on('click', function () {    
-            var duration = Number($('.days-input').val());
-            if(duration > 30 ){
+            var addDays = Number($('.days-input').val());
+            if(addDays > 30 ){
                 alert("please check your input days");
             }else{
                 var i = 0;
-                var rowCount = Number($("#participantTable tr").length);
+                var rowCount = Number($(".participantRow").length);
                 var dayNoSelector = '.participantRow:last-child .the-no-day'; 
                 var dayDescriptionSelector = '.participantRow:last-child .day-description'
-                for(i=0; i<duration; i+=1){
+                for(i=0; i<addDays; i+=1){
                         addRow();
                         var rowIndex = rowCount + i +1;
                         $(dayNoSelector).val(rowIndex);
@@ -406,6 +427,10 @@
                         $(dayDescriptionSelector).attr("name", "ltinerary["+rowIndex+"][description]");
                 } 
                 reloadTinyMce();
+                //update duration value
+                var duration = Number($(".participantRow").length)
+                $('[name="duration"]').val(duration);
+                $('#participantTable .duration').text("Duration: " + duration + " (days)");
             }
         });
 

@@ -232,13 +232,8 @@ class ProductsController extends VoyagerBaseController
     // POST BR(E)AD
     public function update(Request $request, $id)
     {
-        $product = Product::find($id);
-        if($product->recommends()->sync($request->recommends_product_belongstomany_products))
-        {
-            unset($request['recommends_product_belongstomany_products']);
-        }
-        $product->ltinerary = json_encode($request->ltinerary);
-        $product->save();
+      
+        
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -262,6 +257,14 @@ class ProductsController extends VoyagerBaseController
         // Validate fields with ajax
         $val = $this->validateBread($request->all(), $dataType->editRows, $dataType->name, $id)->validate();
         $this->insertUpdateData($request, $slug, $dataType->editRows, $data);
+        //update recommends and ltinerary 
+        $product = Product::find($id);
+        if($product->recommends()->sync($request->recommends_product_belongstomany_products))
+        {
+            unset($request['recommends_product_belongstomany_products']);
+        }
+        $product->ltinerary = json_encode($request->ltinerary);
+        $product->save();
 
         event(new BreadDataUpdated($dataType, $data));
 
@@ -286,6 +289,7 @@ class ProductsController extends VoyagerBaseController
     //****************************************
     public function create(Request $request)
     {
+      
         $slug = $this->getSlug($request);
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
         // Check permission
@@ -321,10 +325,20 @@ class ProductsController extends VoyagerBaseController
         $this->authorize('add', app($dataType->model_name));
         // Validate fields with ajax
         $val = $this->validateBread($request->all(), $dataType->addRows)->validate();
+        $request->ltinerary = json_encode($request->ltinerary); 
+        // added by Ellie
+        unset($request['ltinerary']);
+         //-----------
         $data = $this->insertUpdateData($request, $slug, $dataType->addRows, new $dataType->model_name());
-        event(new BreadDataAdded($dataType, $data));
+        // added by Ellie
         $product = Product::find($data->id);
         $product->recommends()->attach($request->recommends_product_belongstomany_products);
+        $product->ltinerary =  $request->ltinerary;
+        $product->save();
+        //-----------
+        
+        event(new BreadDataAdded($dataType, $data));
+      
         return redirect()
         ->route("voyager.{$dataType->slug}.index")
         ->with([

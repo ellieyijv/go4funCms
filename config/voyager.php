@@ -194,7 +194,7 @@ return [
     ],
 
     'additional_js' => [
-        '/resources/js/customTinyMice.js',
+        //'/resources/js/customTinyMice.js',
     ],
 
     'googlemaps' => [
