@@ -32,5 +32,5 @@ Route::get("/aboutus", "AboutUsController@index");
 
 Route::get("{country}/cities", "CountryController@index");
 
-Route::get("{country}/products", "CountryController@getCountryProducts");
+Route::get("{state}/products/page={page_id}", "ProductAPIController@getStateProducts");
 

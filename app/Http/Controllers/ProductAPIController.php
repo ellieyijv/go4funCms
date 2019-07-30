@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\SpecialDeal;
 use App\Models\Product;
 use App\Models\PopularTour;
+use App\Models\State;
 
 
 class ProductAPIController extends Controller
@@ -43,5 +44,11 @@ class ProductAPIController extends Controller
         })
         ->get();
         return $this->jsonResponse($recommendProduct);
+    }
+
+    public function getStateProducts($state_id, $page_id){
+        $stateProducts = State::find($state_id)->products;
+        $paginationProducts = $this->paginateWithoutKey($stateProducts, $perPage = 3, $page=$page_id, $options = []);
+        return $this->jsonResponse($paginationProducts);
     }
 }
