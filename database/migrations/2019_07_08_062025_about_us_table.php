@@ -39,5 +39,6 @@ class AboutusTable extends Migration
     public function down()
     {
         //
+        Schema::dropIfExists('about_us');
     }
 }
