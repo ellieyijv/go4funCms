@@ -46,9 +46,9 @@ class ProductAPIController extends Controller
         return $this->jsonResponse($recommendProduct);
     }
 
-    public function getStateProducts($state_id, $page_id){
+    public function getStateProducts($state_id, $page_id=1){
         $stateProducts = State::find($state_id)->products;
-        $paginationProducts = $this->paginateWithoutKey($stateProducts, $perPage = 3, $page=$page_id, $options = []);
+        $paginationProducts = $this->paginateWithoutKey($stateProducts, $perPage = 9, $page=$page_id, $options = []);
         return $this->jsonResponse($paginationProducts);
     }
 }

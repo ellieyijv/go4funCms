@@ -17,12 +17,12 @@ class Controller extends BaseController
     protected function jsonResponse($data, $code = 200)
     {
         return response()->json(
-            ['data' => $data], 
+            $data, 
             $code,
             ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
     }
 
-    protected function paginateWithoutKey($items, $perPage = 3, $page = null, $options = [])
+    protected function paginateWithoutKey($items, $perPage = 6, $page = null, $options = [])
     {
 
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);

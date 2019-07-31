@@ -32,5 +32,7 @@ Route::get("/aboutus", "AboutUsController@index");
 
 Route::get("{country}/cities", "CountryController@index");
 
+Route::get("/states", "StateAPIController@getAllStates");
+
 Route::get("{state}/products/page={page_id}", "ProductAPIController@getStateProducts");
 
