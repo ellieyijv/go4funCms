@@ -30,9 +30,14 @@ Route::get("/products", "ProductAPIController@getProductByTerm");
 
 Route::get("/aboutus", "AboutUsController@index");
 
-Route::get("{country}/cities", "CountryController@index");
+// Route::get("{country}/cities", "CountryController@index");
 
 Route::get("/states", "StateAPIController@getAllStates");
 
-Route::get("{state}/products/page={page_id}", "ProductAPIController@getStateProducts");
+// Route::get("{state}/products/page={page_id}", "ProductAPIController@getStateProducts");
+Route::get("{state}/products", "ProductAPIController@getStateProducts");
 
+
+Route::get("{state}/cities", "StateAPIController@getStateCities");
+
+Route::get("state/{cities}/products", "ProductAPIController@getCitiesProducts");

@@ -8,7 +8,7 @@ class State extends Model
 {
     public function cities()
     {
-        return $this->hasMany(City::class, 'city_id');
+        return $this->hasMany(City::class);
     }
 
     public function products()

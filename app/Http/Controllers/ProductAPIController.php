@@ -7,7 +7,7 @@ use App\Models\SpecialDeal;
 use App\Models\Product;
 use App\Models\PopularTour;
 use App\Models\State;
-
+use App\Models\City;
 
 class ProductAPIController extends Controller
 {
@@ -46,9 +46,16 @@ class ProductAPIController extends Controller
         return $this->jsonResponse($recommendProduct);
     }
 
-    public function getStateProducts($state_id, $page_id=1){
-        $stateProducts = State::find($state_id)->products;
-        $paginationProducts = $this->paginateWithoutKey($stateProducts, $perPage = 9, $page=$page_id, $options = []);
-        return $this->jsonResponse($paginationProducts);
+    public function getStateProducts($state_id){
+        $stateProducts = State::findorFail($state_id)->products;
+        // $paginationProducts = $this->paginateWithoutKey($stateProducts, $perPage = 9, $page=$page_id, $options = []);
+        // return $this->jsonResponse($paginationProducts);
+        return $this->jsonResponse($stateProducts);
     }
+
+    public function getCitiesProducts($city_id){
+        $cityProducts = City::find($city_id)->products;
+        return $this->jsonResponse($cityProducts);
+    }
+ 
 }
