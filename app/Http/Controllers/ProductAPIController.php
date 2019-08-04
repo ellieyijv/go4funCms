@@ -24,17 +24,11 @@ class ProductAPIController extends Controller
         return $this->jsonResponse($populartours);
     }
 
-    public function getProductSpots($product){
-        $spots = Product::with('spots')->find($product);
-        return $this->jsonResponse($spots);
+    public function getProductWithDetails($product_code){
+        $product_details = Product::with('spots','state', 'recommends')->where('product_code', '=', $product_code)->first();
+        return $this->jsonResponse($product_details);
     }
 
-    public function getProductRecommends($product_id){
-
-        $recommends = Product::with('recommends')->find($product_id)->recommends->all();
-
-        return $this->jsonResponse($recommends);
-    }
 
     public function getProductByTerm(Request $request){
         $term = $request->input('term');
@@ -46,16 +40,24 @@ class ProductAPIController extends Controller
         return $this->jsonResponse($recommendProduct);
     }
 
-    public function getStateProducts($state_id){
-        $stateProducts = State::findorFail($state_id)->products;
-        // $paginationProducts = $this->paginateWithoutKey($stateProducts, $perPage = 9, $page=$page_id, $options = []);
-        // return $this->jsonResponse($paginationProducts);
-        return $this->jsonResponse($stateProducts);
+    public function getStateProducts($slug){
+        $item = State::where('slug','=', $slug)->first();
+        if(is_null($item)){
+            $error= ["error"=> "Resource not found"];
+            return $this->jsonResponse($error);
+        }else{
+            $id = $item->id;
+            $stateProducts = State::findOrFail($id)->products;
+            // $paginationProducts = $this->paginateWithoutKey($stateProducts, $perPage = 9, $page=$page_id, $options = []);
+            // return $this->jsonResponse($paginationProducts);
+            return $this->jsonResponse($stateProducts);
+        }
+       
     }
 
     public function getCitiesProducts($city_id){
-        $cityProducts = City::find($city_id)->products;
+        $cityProducts = City::findOrFail($city_id)->products;
         return $this->jsonResponse($cityProducts);
     }
- 
+
 }

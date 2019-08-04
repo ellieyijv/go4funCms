@@ -22,22 +22,18 @@ Route::get("/specialdeals", "ProductAPIController@specialDeals");
 
 Route::get("/populartours", "ProductAPIController@popularTours");
 
-Route::get("/{product}/spots", "ProductAPIController@getProductSpots");
-
-Route::get("/{product}/recommends", "ProductAPIController@getProductRecommends");
-
-Route::get("/products", "ProductAPIController@getProductByTerm");
+Route::get("/{product}/withDetails", "ProductAPIController@getProductWithDetails");
 
 Route::get("/aboutus", "AboutUsController@index");
-
-// Route::get("{country}/cities", "CountryController@index");
 
 Route::get("/states", "StateAPIController@getAllStates");
 
 // Route::get("{state}/products/page={page_id}", "ProductAPIController@getStateProducts");
-Route::get("{state}/products", "ProductAPIController@getStateProducts");
+Route::get("{slug}/products", "ProductAPIController@getStateProducts");
 
-
-Route::get("{state}/cities", "StateAPIController@getStateCities");
+Route::get("{slug}/cities", "StateAPIController@getStateCities");
 
 Route::get("state/{cities}/products", "ProductAPIController@getCitiesProducts");
+
+//this is for voyager spots search
+Route::get("/products", "ProductAPIController@getProductByTerm");
