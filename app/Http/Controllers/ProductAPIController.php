@@ -20,7 +20,6 @@ class ProductAPIController extends Controller
     public function popularTours(){
 
         $populartours = PopularTour::with('product')->get();
-
         return $this->jsonResponse($populartours);
     }
 
@@ -60,4 +59,9 @@ class ProductAPIController extends Controller
         return $this->jsonResponse($cityProducts);
     }
 
+    public function getHeroBannerProducts(){
+        $records = Product::with('state')->where('is_hero_banner', '=', '1')->get();
+        $total = count($records);
+        return $this->jsonResponse(['records'=>$records, 'total'=>$total] );
+    }
 }

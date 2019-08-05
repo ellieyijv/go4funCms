@@ -18,7 +18,7 @@ class CreateStatesTable extends Migration
             $table->string('state');
             $table->string('slug');
             $table->string('banner_iamge');
-            $table->string('card_iamge');
+            $table->string('thumbnail');
            
            
         });

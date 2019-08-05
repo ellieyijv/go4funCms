@@ -116,7 +116,7 @@
                                
                                 $dataTypeRows = $dataType->{($edit ? 'editRows' : 'addRows' )};
                                 //split collection to two part adapting to layout
-                                list($overview, $description) = $dataTypeRows->chunk(14);
+                                list($overview, $description) = $dataTypeRows->chunk(15);
                             @endphp
 
                             <div class="form-group col-md-12">
@@ -158,7 +158,7 @@
                                 </div>
                             @endforeach
                             
-                            <div class="form-group col-md-6 recommends">
+                            <div class="form-group col-md-3 recommends">
                                 
                                 <label class="control-label" for="name">Recommended Products(Limit 3)</label>
                                 <select class="form-control  recommends_select select2-taggable select2-hidden-accessible" name="recommends_product_belongstomany_products[]" multiple  data-select2-id="20" tabindex="-1" aria-hidden="true">
@@ -437,6 +437,10 @@
         //remove days event
         $('#participantTable').on('click', ".remove", function (event) {     
             removeRow($(this));
+            //update duration value
+            var duration = Number($(".participantRow").length)
+                $('[name="duration"]').val(duration);
+                $('#participantTable .duration').text("Duration: " + duration + " (days)");
         });
     
       

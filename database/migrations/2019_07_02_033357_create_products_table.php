@@ -26,6 +26,7 @@ class CreateProductsTable extends Migration
             $table->string('pick_up_service');
             $table->string('meals');
             $table->string('policy');
+            $table->boolean('is_herobanner')->nullable()->default(false);
             $table->string('travel_document');
             $table->string('flyer');
             $table->string('card_image');  
