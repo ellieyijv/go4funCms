@@ -13,13 +13,15 @@ class ProductAPIController extends Controller
 {
     public function specialDeals(){
 
-        $specialdeals = SpecialDeal::with('product')->get();
+        $specialdeals = SpecialDeal::with(['product' => function($q){
+            $q->with(['state']);
+        }])->get();
         return $this->jsonResponse($specialdeals);
     }
 
     public function popularTours(){
 
-        $populartours = PopularTour::with('product')->get();
+        $populartours = PopularTour::with('product.state')->get();
         return $this->jsonResponse($populartours);
     }
 
@@ -31,7 +33,7 @@ class ProductAPIController extends Controller
 
     public function getProductByTerm(Request $request){
         $term = $request->input('term');
-        $recommendProduct = Product::where(function($q) use ($term){
+        $recommendProduct = Product::with('state')->where(function($q) use ($term){
             $q->where('product_code','like', "%$term%")
               ->orWhere('product_name', 'like', "%$term%");
         })
