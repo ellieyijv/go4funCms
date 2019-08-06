@@ -53,11 +53,23 @@ class ProductAPIController extends Controller
             // return $this->jsonResponse($paginationProducts);
             return $this->jsonResponse($stateProducts);
         }
-       
+    
     }
 
-    public function getCitiesProducts($city_id){
-        $cityProducts = City::findOrFail($city_id)->products;
+    public function getCitiesProducts($city_id, Request $request){
+        $sort = $request->input('sort');
+        $desc = $request->input('desc');
+        
+        $cityProducts = Product::whereHas('cities',function($q) use ($city_id){
+            $q->where('cities.id',$city_id);
+        });
+        
+        if($sort){
+            $cityProducts =$cityProducts->orderBy($sort,$desc)->get(['id','duration']);
+        }else{
+            $cityProducts =$cityProducts->get();
+        }
+
         return $this->jsonResponse($cityProducts);
     }
 

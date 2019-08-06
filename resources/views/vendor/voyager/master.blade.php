@@ -43,6 +43,9 @@
         .voyager .breadcrumb a{
             color:{{ config('voyager.primary_color','#22A7F0') }};
         }
+        #mceu_28{
+            display:none;
+        }
     </style>
 
     @if(!empty(config('voyager.additional_css')))<!-- Additional CSS -->
