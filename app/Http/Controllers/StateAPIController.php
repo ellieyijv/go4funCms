@@ -21,7 +21,7 @@ class StateAPIController extends Controller
         }else{
             $state_id = $item->id;
             $stateCities = State::find($state_id)->cities;
-            return  $this->jsonResponse($stateCities);
+            return  $this->jsonResponse(['cities'=>$stateCities, 'state'=>$item]);
         }
     }
 }
