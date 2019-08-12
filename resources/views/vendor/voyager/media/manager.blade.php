@@ -36,7 +36,7 @@
     </div>
     <div v-if="hidden_element">
         <div class="btn btn-sm btn-default"  style="width:40%" id="uploadBtn"  v-on:click="expanded = !expanded;">
-           Upload Image
+           Browse Image
         </div>
     </div>
     <div class="upload-file-modal" :style="expanded ? 'display:block' : 'display:none'">

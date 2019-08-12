@@ -46,6 +46,10 @@
         #mceu_28{
             display:none;
         }
+
+        #bread-actions .delete, #bread-actions .view, #bulk_delete_btn{
+            display:none;
+        }
     </style>
 
     @if(!empty(config('voyager.additional_css')))<!-- Additional CSS -->

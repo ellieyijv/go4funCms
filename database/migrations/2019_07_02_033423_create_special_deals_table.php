@@ -17,6 +17,7 @@ class CreateSpecialDealsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('product_id');
             $table->string('description');
+            $table->string('card_iamge');
             $table->timestamps();
         });
     }

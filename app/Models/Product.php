@@ -18,6 +18,10 @@ class Product extends Model
         return $this->hasOne(PopularTour::class);
     }
 
+    public function hero_banner(){
+        return $this->hasOne(HeroBanner::class);
+    }
+
     public function cities()
     {  
         return $this->belongsToMany(City::class, 'product_cities');   
@@ -37,4 +41,6 @@ class Product extends Model
         $recommends = $this->belongsToMany(Product::class, 'product_recommends', 'product_id', 'recommend_id');
         return $recommends;
     }
+
+    
 }
