@@ -16,7 +16,7 @@ class ProductAPIController extends Controller
 
         $special_deals = SpecialDeal::with(['product' => function($q){
             $q->with(['state']);
-        }])->get([]);
+        }])->get();
         if(!$special_deals){
             $msg = ["error"=> "special_deals not found"];
             return $this->jsonResponse($msg);
