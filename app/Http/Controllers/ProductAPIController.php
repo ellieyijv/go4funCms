@@ -16,7 +16,7 @@ class ProductAPIController extends Controller
 
         $special_deals = SpecialDeal::with(['product' => function($q){
             $q->with(['state']);
-        }])->get();
+        }])->get([]);
         if(!$special_deals){
             $msg = ["error"=> "special_deals not found"];
             return $this->jsonResponse($msg);
@@ -110,7 +110,7 @@ class ProductAPIController extends Controller
         
         $hero_banner_info = HeroBanner::with('product.state')->get();
         if(!$hero_banner_info){
-            $msg = ["error"=> "state_products not found"];
+            $msg = ["error"=> "hero_banner_info not found"];
             return $this->jsonResponse($msg);
         }else{
             return $this->jsonResponse($hero_banner_info);
